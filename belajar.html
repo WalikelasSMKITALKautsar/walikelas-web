@@ -144,6 +144,7 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
 #it2{animation:muncul .5s var(--d) both!important;opacity:1;transform:none}
 .it-kd{width:100%;background:rgba(255,255,255,.97);color:var(--ink);border-radius:24px;padding:20px;margin-top:16px;text-align:left;box-shadow:0 20px 40px -20px rgba(0,0,0,.6);animation:masuk .6s .2s cubic-bezier(.2,1.4,.4,1) both}
 .it-kd .it-h2{color:var(--c1)}.it-ks{font-size:13.5px;color:var(--mute);margin-top:4px;line-height:1.5}.it-kd label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}.it-kd .btn.it-b{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;max-width:none}
+.it-lain{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:800;color:var(--c1);text-decoration:underline;cursor:pointer}
 .it-cc{font-size:12.5px;font-weight:700;margin-top:6px;min-height:18px;color:var(--mute)}.it-cc.ok{color:#2B9348}.it-cc.no{color:#C25E00}
 .it-ok{font-size:54px;text-align:center;animation:pop .5s cubic-bezier(.2,1.6,.4,1) both}.it-kd .it-ok+.it-h2,.it-kd .it-ok~.it-ks{text-align:center}
 /* ===== buku materi ===== */
@@ -205,7 +206,7 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
   function animRing(){setTimeout(function(){[].forEach.call(document.querySelectorAll("[data-to]"),function(c){c.style.strokeDashoffset=c.getAttribute("data-to")})},60)}
 
   /* identitas siswa untuk mengirim hasil ke guru */
-  function siapa(lanjut){if(ME){lanjut();return}if(D.jenis!=="latihan"&&D.isiSendiri!==false){ov('<h3>Siapa kamu?</h3><p>Pilih kelas lalu tulis nama lengkapmu supaya hasilmu tercatat di guru.</p>'+formIdent(D)+'<button class="btn" id="sok">Simpan</button><button class="btn gh" id="sbt">Batal</button>');var amb=ikatIdent(D);G("sbt").onclick=tutup;G("sok").onclick=function(){var m=amb();if(!m)return;ME=m;ST.me=ME;simpanL(ST);tutup();lanjut()};return}var K=D.isiSendiri&&D.jenis!=="latihan"?[]:(D.kelas||[]);
+  function siapa(lanjut){if(ME){lanjut();return}if(D.jenis!=="latihan"){ov('<h3>Siapa kamu?</h3><p>Pilih kelas lalu pilih namamu supaya hasilmu tercatat di guru.</p>'+formIdent(D)+'<button class="btn" id="sok">Simpan</button><button class="btn gh" id="sbt">Batal</button>');var amb=ikatIdent(D);G("sbt").onclick=tutup;G("sok").onclick=function(){var m=amb();if(!m)return;ME=m;ST.me=ME;simpanL(ST);tutup();lanjut()};return}var K=D.isiSendiri&&D.jenis!=="latihan"?[]:(D.kelas||[]);
     ov('<h3>Siapa kamu?</h3><p>Pilih kelas dan nama supaya hasilmu tercatat di guru.</p>'+(K.length?'<label>Kelas</label><select id="sk"><option value="">Pilih kelas</option>'+K.map(function(k){return'<option value="'+e(k.id)+'">'+e(k.nama)+'</option>'}).join("")+'</select><label>Nama</label><select id="sn" disabled><option value="">Pilih kelas dahulu</option></select>':'<label>Nama lengkap</label><input id="sn2" maxlength="70" placeholder="Nama lengkap"><label>Kelas</label><input id="sk2" maxlength="30" placeholder="mis. XI TKR 2" value="'+e(D.kelasNama&&D.kelasNama.indexOf(",")<0?D.kelasNama:"")+'">')+'<button class="btn" id="sok">Simpan</button><button class="btn gh" id="sbt">Batal</button>');
     var sk=G("sk"),sn=G("sn");if(sk){sk.onchange=function(){var k=K.filter(function(x){return x.id===sk.value})[0];sn.disabled=!k;sn.innerHTML=k?'<option value="">Pilih nama</option>'+k.siswa.map(function(x){return'<option value="'+e(x.id)+'">'+e(x.name)+'</option>'}).join(""):'<option value="">Pilih kelas dahulu</option>'};if(K.length===1){sk.value=K[0].id;sk.onchange()}}
     G("sbt").onclick=tutup;G("sok").onclick=function(){if(sk){var k=K.filter(function(x){return x.id===sk.value})[0],w=k&&k.siswa.filter(function(x){return x.id===sn.value})[0];if(!w){toast("Pilih kelas dan nama dahulu");return}ME={sid:w.id,nama:w.name,kelas:k.nama}}
@@ -231,19 +232,20 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
   function nrm(t){return String(t||"").toLowerCase().replace(/[^a-z0-9]/g,"")}
   function cocok(kls,nama){var n=nrm(nama);if(!kls||n.length<3)return null;var L=kls.siswa||[],w=L.filter(function(s){return nrm(s.name)===n})[0];if(w)return w;
     if(String(nama).trim().split(/\s+/).length<2)return null;var c=L.filter(function(s){var m=nrm(s.name);return m.indexOf(n)===0||n.indexOf(m)===0});return c.length===1?c[0]:null}
-  /* formulir identitas: kelas dari Data Siswa, nama ditulis sendiri lalu dicocokkan */
-  function formIdent(d){var K=d.kelas||[],pilih=d.isiSendiri===false;
+  /* formulir identitas: kelas dan nama dipilih dari Data Siswa. Ketik nama hanya bila guru mengizinkan */
+  function formIdent(d){var K=d.kelas||[];
     if(!K.length)return'<label>Nama lengkap</label><input id="in2" maxlength="70" placeholder="mis. Ahmad Fauzan" autocomplete="name"><label>Kelas</label><input id="ik2" maxlength="30" placeholder="mis. XI TKR 2">';
-    return'<label>Kelas</label><select id="ik"><option value="">Pilih kelas</option>'+K.map(function(k){return'<option value="'+e(k.id)+'">'+e(k.nama)+'</option>'}).join("")+'</select>'+
-      (pilih?'<label>Nama</label><select id="in" disabled><option value="">Pilih kelas dahulu</option></select>':'<label>Nama lengkap</label><input id="in2" maxlength="70" placeholder="Ketik namamu" autocomplete="off" list="dlN"><datalist id="dlN"></datalist><div class="it-cc" id="icc"></div>')}
-  function ikatIdent(d){var K=d.kelas||[],ik=G("ik"),inn=G("in"),in2=G("in2");
+    return'<label>Kelas</label><select id="ik"><option value="">Pilih kelas</option>'+K.map(function(k){return'<option value="'+e(k.id)+'">'+e(k.nama)+' ('+(k.siswa||[]).length+' siswa)</option>'}).join("")+'</select>'+
+      '<label>Nama</label><select id="in" disabled><option value="">Pilih kelas dahulu</option></select>'+
+      (d.isiSendiri===true?'<input id="in2" maxlength="70" placeholder="Tulis nama lengkapmu" autocomplete="name" style="display:none"><a class="it-lain" id="itLain">Namaku tidak ada di daftar</a>':'')+'<div class="it-cc" id="icc"></div>'}
+  function ikatIdent(d){var K=d.kelas||[],ik=G("ik"),inn=G("in"),in2=G("in2"),manual=!ik;
     var kls=function(){return ik?K.filter(function(x){return x.id===ik.value})[0]:null};
-    var cek=function(){var c=G("icc");if(!c||!in2)return;var k=kls(),w=cocok(k,in2.value);c.className="it-cc"+(w?" ok":in2.value.trim().length>2&&k?" no":"");c.innerHTML=w?"✓ Terdaftar: <b>"+e(w.name)+"</b>":in2.value.trim().length>2&&k?"Nama belum cocok dengan daftar "+e(k.nama)+". Periksa ejaannya.":""};
-    if(ik){ik.onchange=function(){var k=kls();if(inn){inn.disabled=!k;inn.innerHTML=k?'<option value="">Pilih nama</option>'+k.siswa.map(function(x){return'<option value="'+e(x.id)+'">'+e(x.name)+'</option>'}).join(""):'<option value="">Pilih kelas dahulu</option>'}
-        var dl=G("dlN");if(dl)dl.innerHTML=k?k.siswa.map(function(x){return'<option value="'+e(x.name)+'">'}).join(""):"";cek()};if(K.length===1){ik.value=K[0].id;ik.onchange()}}
-    if(in2)in2.oninput=cek;
+    if(ik){ik.onchange=function(){var k=kls();inn.disabled=!k;inn.innerHTML=k?'<option value="">Pilih namamu ('+k.siswa.length+' siswa)</option>'+k.siswa.map(function(x){return'<option value="'+e(x.id)+'">'+e(x.name)+'</option>'}).join(""):'<option value="">Pilih kelas dahulu</option>';G("icc").textContent=""};
+      inn.onchange=function(){var k=kls(),w=k&&k.siswa.filter(function(x){return x.id===inn.value})[0];var c=G("icc");c.className="it-cc"+(w?" ok":"");c.innerHTML=w?"✓ "+e(w.name)+" · "+e(k.nama):""};
+      if(K.length===1){ik.value=K[0].id;ik.onchange()}
+      var ln=G("itLain");if(ln)ln.onclick=function(){manual=!manual;inn.style.display=manual?"none":"";in2.style.display=manual?"":"none";ln.textContent=manual?"Pilih dari daftar nama":"Namaku tidak ada di daftar";if(manual)in2.focus()}}
     return function(){var k=kls();if(ik&&!k){toast("Pilih kelasmu dahulu");ik.focus();return null}
-      if(inn){var w=k.siswa.filter(function(x){return x.id===inn.value})[0];if(!w){toast("Pilih namamu dahulu");return null}return{sid:w.id,nama:w.name,kelas:k.nama}}
+      if(!manual){var w=k.siswa.filter(function(x){return x.id===inn.value})[0];if(!w){toast("Pilih namamu dari daftar");inn.focus();return null}return{sid:w.id,nama:w.name,kelas:k.nama}}
       var nm=in2.value.replace(/\s+/g," ").trim();if(nm.length<3){toast("Tulis nama lengkapmu");in2.focus();return null}
       if(k){var c=cocok(k,nm);if(c)return{sid:c.id,nama:c.name,kelas:k.nama}}
       var kl=k?k.nama:G("ik2").value.replace(/\s+/g," ").trim();if(!kl){toast("Tulis kelasmu");G("ik2").focus();return null}
@@ -267,7 +269,7 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
     function identitas(){
       if(ME){layar('<div class="it-mas kecil">'+MASKOT+'<div class="it-bub">Senang bertemu lagi!</div></div><div class="it-kd"><h2 class="it-h2" style="margin-top:0">Halo, '+e(ME.nama.split(" ")[0])+'! 👋</h2><p class="it-ks">'+e(ME.nama)+(ME.kelas?" · "+e(ME.kelas):"")+'</p><button class="btn it-b on" id="itM">Lanjut Belajar 🚀</button><button class="btn gh" id="itG">Bukan saya, ganti nama</button></div>');
         G("itM").onclick=selesaiIntro;G("itG").onclick=function(){ME=null;delete ST.me;simpanL(ST);identitas()};return}
-      layar('<div class="it-mas kecil">'+MASKOT+'<div class="it-bub">Kenalan dulu, yuk!</div></div><div class="it-kd"><h2 class="it-h2" style="margin-top:0">Siapa namamu?</h2><p class="it-ks">Pilih kelas lalu tulis nama lengkapmu supaya hasil belajarmu tercatat di guru.</p>'+formIdent(d)+'<button class="btn it-b on" id="itK">Masuk Kelas 🚀</button></div>');
+      layar('<div class="it-mas kecil">'+MASKOT+'<div class="it-bub">Kenalan dulu, yuk!</div></div><div class="it-kd"><h2 class="it-h2" style="margin-top:0">Siapa namamu?</h2><p class="it-ks">Pilih kelas lalu pilih namamu supaya hasil belajarmu tercatat di guru.</p>'+formIdent(d)+'<button class="btn it-b on" id="itK">Masuk Kelas 🚀</button></div>');
       var ambil=ikatIdent(d);setTimeout(function(){var x=G("in2");if(x&&!G("ik"))x.focus()},300);
       G("itK").onclick=function(){var m=ambil();if(!m)return;ME=m;ST.me=ME;simpanL(ST);konfeti(40);var c=el.querySelector(".it-kd");if(c)c.innerHTML='<div class="it-ok">🎉</div><h2 class="it-h2" style="margin-top:0">Siap, '+e(ME.nama.split(" ")[0])+'!</h2><p class="it-ks">'+e(ME.kelas||"")+' · Selamat belajar. Semangat!</p>';setTimeout(selesaiIntro,1300)};
       [].forEach.call(el.querySelectorAll("input"),function(x){x.onkeydown=function(ev){if(ev.key==="Enter")G("itK").click()}})}
