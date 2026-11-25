@@ -95,6 +95,30 @@ input:focus,select:focus,textarea:focus{border-color:#16388A;box-shadow:0 0 0 3p
 @keyframes hcPop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
 @keyframes hcMuncul{0%{transform:translateY(10px);opacity:0}100%{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.hc *,.hc{animation:none!important}}
+/* ===== tampilan awal ujian ===== */
+.hd{background:linear-gradient(125deg,#0C2257,#16388A 35%,#2F5DA8 65%,#0C8599);background-size:240% 240%;animation:hdGeser 12s ease-in-out infinite}
+@keyframes hdGeser{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hd-ik{position:absolute;inset:0;pointer-events:none;overflow:hidden}.hd-ik i{position:absolute;bottom:-30px;font-style:normal;opacity:.28;animation:hdNaik linear infinite}
+@keyframes hdNaik{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(-260px) rotate(200deg);opacity:0}}
+.hd>*{position:relative;z-index:1}
+.inf span.ti{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:9px 13px;min-width:74px;animation:tiMuncul .5s both}.inf span.ti b{font-size:20px;line-height:1.1}.inf span.ti small{font-size:11px;font-weight:700;opacity:.85}
+@keyframes tiMuncul{0%{transform:translateY(10px);opacity:0}100%{transform:none;opacity:1}}
+.sapa{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#E7F5FF,#E6FCF5);border-radius:18px;padding:10px 14px 10px 6px;margin-bottom:6px}
+.sapa .av{width:78px;height:84px;flex:none}.sapa .av svg{width:100%;height:100%;overflow:visible}.sapa b{display:block;font-size:16px;line-height:1.3}.sapa span{display:block;font-size:12.5px;color:#55617A;line-height:1.45;margin-top:3px}
+.sapa.hore .av{animation:avHore .7s}@keyframes avHore{0%,100%{transform:none}40%{transform:translateY(-10px) rotate(-4deg)}70%{transform:translateY(0) rotate(3deg)}}
+.lgk{display:flex;gap:6px;margin:14px 0 2px}.lgk span{flex:1;text-align:center;font-size:11.5px;font-weight:800;color:#8A94A8;background:#F1F4FA;border-radius:99px;padding:7px 4px;transition:.3s}.lgk span.on{background:#16388A;color:#fff}.lgk span.ok{background:#D3F9D8;color:#2B8A3E}
+.atr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.atr div{background:#F7F9FD;border:1.5px solid #E3E9F4;border-radius:16px;padding:11px 12px;animation:tiMuncul .5s both}.atr .ik{font-size:22px}.atr b{display:block;font-size:13px;margin-top:4px;line-height:1.3}.atr small{display:block;font-size:11.5px;color:#55617A;line-height:1.4;margin-top:3px}
+.atr .bhy{background:#FFF5F5;border-color:#FFC9C9}.atr .bhy b{color:#C92A2A}
+.btn.go{position:relative;overflow:hidden;font-size:16.5px;padding:17px;box-shadow:0 12px 24px -12px #16388A}.btn.go:not(:disabled):after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:kilap 2.4s infinite}
+@keyframes kilap{0%{left:-60%}60%,100%{left:130%}}
+.hit{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,#2F5DA8,#0C2257 70%);color:#fff;text-align:center}
+.hit b{font-size:120px;font-weight:800;line-height:1;display:block;animation:hitPop .9s both}.hit p{font-size:15px;font-weight:700;opacity:.9;margin-top:14px}
+@keyframes hitPop{0%{transform:scale(2.2);opacity:0}30%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:scale(.6);opacity:0}}
+/* ===== peringatan keluar tab ===== */
+.ov .wr.gt{animation:getar .5s 2}@keyframes getar{0%,100%{transform:none}20%{transform:translateX(-8px) rotate(-6deg)}40%{transform:translateX(8px) rotate(6deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.pot{display:inline-block;background:#E03131;color:#fff;font-size:30px;font-weight:800;border-radius:16px;padding:6px 18px;margin:4px 0 6px;animation:hitPop2 .6s both}@keyframes hitPop2{0%{transform:scale(.3)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.ksp{display:flex;gap:6px;justify-content:center;margin-top:12px}.ksp i{width:26px;height:10px;border-radius:6px;background:#D3F9D8}.ksp i.hb{background:#E03131}
+.ov .sisa{font-size:12.5px;font-weight:700;color:#55617A;margin-top:6px}
 </style>
 </head>
 <body>
@@ -134,28 +158,37 @@ input:focus,select:focus,textarea:focus{border-color:#16388A;box-shadow:0 0 0 3p
 
   function masuk(){var d=D,lk=muatLokal(),npg=d.soal.filter(function(x){return x.t==="pg"}).length,nur=d.soal.length-npg;
     document.title=d.judul;G("jd").textContent=d.judul;G("ds").textContent=[d.mapel,d.sekolah].filter(Boolean).join(" · ");
-    G("inf").innerHTML=(npg?"<span>"+npg+" pilihan ganda</span>":"")+(nur?"<span>"+nur+" uraian</span>":"")+"<span>Waktu "+d.durasi+" menit</span>"+(d.guru?"<span>"+e(d.guru)+"</span>":"");
+    var pen=Number(d.penalti)||0,ti=function(b,s,i){return'<span class="ti" style="animation-delay:'+(i*.08)+'s"><b>'+b+'</b><small>'+s+'</small></span>'},n=0;
+    G("inf").innerHTML=ti(d.soal.length,"soal",n++)+ti(d.durasi,"menit",n++)+(npg?ti(npg,"pilihan ganda",n++):"")+(nur?ti(nur,"uraian",n++):"")+(d.guru?'<span style="align-self:center">👩‍🏫 '+e(d.guru)+'</span>':"");
+    var hd=document.querySelector(".hd");if(hd&&!hd.querySelector(".hd-ik")){var ik=document.createElement("div");ik.className="hd-ik";ik.innerHTML=["✏️","📘","⭐","🧠","📐","💡","✨","📝"].map(function(x,i){return'<i style="left:'+(i*12+4)+'%;font-size:'+(16+i%3*6)+'px;animation-duration:'+(7+i%4*2)+'s;animation-delay:'+(-i*1.4)+'s">'+x+'</i>'}).join("");hd.insertBefore(ik,hd.firstChild)}
     if(!d.buka&&!(lk&&lk.p)){isi.innerHTML='<div class="ok"><h2>Ujian belum dibuka</h2><p>Ujian belum dibuka atau sudah ditutup oleh guru. Muat ulang halaman ini saat guru memberi tanda mulai.</p></div><button class="btn gh" id="ml">Muat Ulang</button>';G("ml").onclick=function(){location.reload()};return}
-    isi.innerHTML='<label>Kelas</label><select id="kls"><option value="">Pilih kelas</option>'+d.kelas.map(function(k){return'<option value="'+e(k.id)+'">'+e(k.nama)+'</option>'}).join("")+'</select>'+
+    var kel=d.maksKeluar?"Batas "+d.maksKeluar+" kali, lebih dari itu ujian langsung dikumpulkan.":"Setiap kali keluar tercatat dan dilihat guru.";
+    isi.innerHTML='<div class="sapa" id="spa"><div class="av">'+avatar("N")+'</div><div><b id="spH">Halo! Siap ujian? 👋</b><span id="spS">Pilih kelas dan namamu, baca aturan singkat lalu tekan Mulai.</span></div></div>'+
+      '<div class="lgk"><span class="on" id="lg1">1 · Kelas</span><span id="lg2">2 · Nama</span><span id="lg3">3 · Mulai</span></div>'+
+      '<label style="margin-top:12px">Kelas</label><select id="kls"><option value="">Pilih kelas</option>'+d.kelas.map(function(k){return'<option value="'+e(k.id)+'">'+e(k.nama)+'</option>'}).join("")+'</select>'+
       '<label>Nama</label><select id="nm" disabled><option value="">Pilih kelas terlebih dahulu</option></select>'+
       (d.pakaiKode?'<label>Kode Ujian</label><input id="kd" autocomplete="off" placeholder="Kode dari guru" style="text-transform:uppercase">':'')+
-      '<ul class="rule"><li>Waktu berjalan sejak tombol Mulai ditekan dan tidak bisa dihentikan.</li><li>Jangan berpindah tab, membuka aplikasi lain atau menutup halaman. Setiap kali keluar tercatat di server dan dilihat guru.</li>'+(d.maksKeluar?'<li>Keluar halaman '+d.maksKeluar+' kali membuat ujian langsung dikumpulkan.</li>':'')+'<li>Jawaban tersimpan otomatis. Tekan Kumpulkan bila sudah selesai.</li></ul>'+
-      '<div class="er" id="er"></div><button class="btn" id="go">Mulai Ujian</button>';
-    var kls=G("kls"),nm=G("nm");
+      '<div class="atr">'+[["⏱️","Waktu "+d.durasi+" menit","Berjalan sejak tombol Mulai ditekan dan tidak bisa dihentikan."],["🚫","Tetap di halaman ini",(pen?"Keluar tab atau aplikasi mengurangi nilai "+String(pen).replace(".",",")+" poin. ":"")+kel,1],["💾","Tersimpan otomatis","Jawaban aman walau sinyal putus sebentar."],["✅","Kumpulkan di akhir","Periksa soal ragu-ragu sebelum menekan Kumpulkan."]].map(function(a,i){return'<div class="'+(a[3]?"bhy":"")+'" style="animation-delay:'+(.15+i*.1)+'s"><span class="ik">'+a[0]+'</span><b>'+a[1]+'</b><small>'+a[2]+'</small></div>'}).join("")+'</div>'+
+      '<div class="er" id="er"></div><button class="btn go" id="go">Mulai Ujian 🚀</button>';
+    var kls=G("kls"),nm=G("nm"),lgk=function(){var a=!!kls.value,b=!!nm.value;G("lg1").className=a?"ok":"on";G("lg2").className=b?"ok":a?"on":"";G("lg3").className=b?"on":"";
+      var sw=b?((d.kelas.filter(function(x){return x.id===kls.value})[0]||{siswa:[]}).siswa.filter(function(x){return x.id===nm.value})[0]):null,sp=G("spa");
+      if(sw){G("spH").textContent="Halo, "+String(sw.name).split(" ")[0].toLowerCase().replace(/^./,function(c){return c.toUpperCase()})+"! Semoga lancar 💪";G("spS").textContent="Baca aturan di bawah, tarik napas, lalu tekan Mulai.";sp.classList.remove("hore");void sp.offsetWidth;sp.classList.add("hore")}
+      else{G("spH").textContent="Halo! Siap ujian? 👋";G("spS").textContent=a?"Sekarang pilih namamu.":"Pilih kelas dan namamu, baca aturan singkat lalu tekan Mulai."}};
     kls.onchange=function(){var k=d.kelas.filter(function(x){return x.id===kls.value})[0];nm.disabled=!k;nm.innerHTML=k?'<option value="">Pilih nama</option>'+k.siswa.map(function(x){return'<option value="'+e(x.id)+'">'+e(x.name)+'</option>'}).join(""):'<option value="">Pilih kelas terlebih dahulu</option>'};
+    var ko=kls.onchange;kls.onchange=function(){ko();lgk()};nm.onchange=lgk;
     if(d.kelas.length===1){kls.value=d.kelas[0].id;kls.onchange()}
-    if(lk&&lk.p){kls.value=lk.p.k;kls.onchange();nm.value=lk.p.sid}
+    if(lk&&lk.p){kls.value=lk.p.k;kls.onchange();nm.value=lk.p.sid;lgk()}
     G("go").onclick=function(){var er=G("er"),b=G("go");er.style.display="none";
       if(!kls.value||!nm.value){er.textContent="Pilih kelas dan nama terlebih dahulu.";er.style.display="block";return}
       var k=d.kelas.filter(function(x){return x.id===kls.value})[0],sw=k.siswa.filter(function(x){return x.id===nm.value})[0];
       b.disabled=true;b.textContent="Menyiapkan…";
       kirim({aksi:"ujMulai",u:U,k:k.id,sid:sw.id,kode:G("kd")?G("kd").value:""}).then(function(r){
-        if(!r||!r.ok){er.textContent=(r&&r.pesan==="Kunci salah"?"Server belum diperbarui. Hubungi guru (kode: V4).":(r&&r.pesan)||"Gagal memulai");er.style.display="block";b.disabled=false;b.textContent="Mulai Ujian";return}
+        if(!r||!r.ok){er.textContent=(r&&r.pesan==="Kunci salah"?"Server belum diperbarui. Hubungi guru (kode: V4).":(r&&r.pesan)||"Gagal memulai");er.style.display="block";b.disabled=false;b.textContent="Mulai Ujian 🚀";return}
         P={k:k.id,sid:sw.id,nama:sw.name,kelas:k.nama};
         if(r.selesai){tamat(r);return}
         var lama=(lk&&lk.p&&lk.p.sid===sw.id)?lk:null;jawab=Object.assign({},r.jawab&&typeof r.jawab==="object"?r.jawab:{},lama&&lama.j||{});ragu=lama&&lama.r||{};cur=lama&&lama.c||0;
-        keluar=Math.max(Number(r.keluar)||0,lama?Number(lama.k)||0:0);akhir=Date.now()+r.sisa*1000;T0=Date.now()-Math.max(0,(D.durasi*60-r.sisa))*1000;siapkan();simpan();mulai();
-      }).catch(function(){er.textContent="Tidak dapat terhubung. Periksa koneksi lalu coba lagi.";er.style.display="block";b.disabled=false;b.textContent="Mulai Ujian"})};
+        keluar=Math.max(Number(r.keluar)||0,lama?Number(lama.k)||0:0);akhir=Date.now()+r.sisa*1000;T0=Date.now()-Math.max(0,(D.durasi*60-r.sisa))*1000;siapkan();simpan();if(Object.keys(jawab).length||keluar)mulai();else hitungMundur(mulai);
+      }).catch(function(){er.textContent="Tidak dapat terhubung. Periksa koneksi lalu coba lagi.";er.style.display="block";b.disabled=false;b.textContent="Mulai Ujian 🚀"})};
   }
 
   function terisi(x){var v=jawab[x.id];return x.t==="pg"?!!v:!!(v&&String(v).trim())}
@@ -176,7 +209,9 @@ input:focus,select:focus,textarea:focus{border-color:#16388A;box-shadow:0 0 0 3p
       '<div class="lg"><span><i style="background:#2B8A3E"></i>Terjawab</span><span><i style="background:#FFE8CC;border:2px solid #E8590C"></i>Ragu-ragu</span><span><i style="border:2px solid #D9E2F1"></i>Belum</span></div><button class="btn gh" id="tt">Tutup</button><button class="btn" id="ky" style="background:#2B8A3E;margin-top:8px">Kumpulkan Ujian</button>';
     ov(h);[].forEach.call(G("ovb").querySelectorAll("[data-i]"),function(b){b.onclick=function(){cur=+b.dataset.i;tutupOv();tampilSoal()}});G("tt").onclick=tutupOv;G("ky").onclick=konfirmasi}
   function konfirmasi(){var ks=SO.length-SO.filter(terisi).length,rg=Object.keys(ragu).length;ov('<h3>Kumpulkan ujian?</h3><p>'+(ks?"Masih ada <b>"+ks+" soal</b> yang belum dijawab. ":"Semua soal sudah dijawab. ")+(rg?"Ada <b>"+rg+" soal</b> ditandai ragu-ragu. ":"")+'Setelah dikumpulkan, jawaban tidak bisa diubah.</p><button class="btn" id="ya" style="background:#2B8A3E">Ya, Kumpulkan</button><button class="btn gh" id="tdk">Periksa Lagi</button>');G("tdk").onclick=tutupOv;G("ya").onclick=function(){kumpul("")}}
-  function tampilKeluar(){var k=G("kl");k.innerHTML="Keluar<br>"+keluar+"x";k.className="kl"+(keluar?" ada":"")}
+  function hitungMundur(lanjut){var el=document.createElement("div"),L=["3","2","1","Mulai!"],i=0;el.className="hit";document.body.appendChild(el);
+    (function satu(){if(i>=L.length){el.remove();lanjut();return}el.innerHTML='<div><b style="'+(i===3?"font-size:72px":"")+'">'+L[i]+'</b><p>'+(i<3?"Bersiap… baca soal dengan teliti":"Semoga sukses! ✨")+'</p></div>';i++;setTimeout(satu,i===4?700:800)})()}
+  function tampilKeluar(){var k=G("kl"),pen=Number(D&&D.penalti)||0;k.innerHTML="Keluar<br>"+keluar+"x"+(pen&&keluar?"<br>−"+String(Math.round(pen*keluar*100)/100).replace(".",","):"");k.className="kl"+(keluar?" ada":"")}
   function mulai(){G("awal").style.display="none";G("uj").style.display="flex";G("bj").textContent=D.judul;G("bn").textContent=P.nama+" · "+P.kelas;jalan=true;
     if(cur>=SO.length)cur=0;tampilSoal();tampilKeluar();detik();tik=setInterval(detik,1000);
     G("pv").onclick=function(){if(cur>0){cur--;tampilSoal()}};G("nx").onclick=function(){if(cur<SO.length-1){cur++;tampilSoal()}else konfirmasi()};G("ds2").onclick=daftar;
@@ -192,7 +227,10 @@ input:focus,select:focus,textarea:focus{border-color:#16388A;box-shadow:0 0 0 3p
   function pergiYa(){if(!jalan||selesai||pergi)return;pergi=true;keluar++;simpan();tampilKeluar();catat(true)}
   function kembali(){if(!pergi)return;pergi=false;if(!jalan||selesai)return;
     if(D.maksKeluar&&keluar>=D.maksKeluar){kumpul("Kamu keluar dari halaman ujian "+keluar+" kali. Ujian dikumpulkan otomatis.");return}
-    ov('<div class="wr">!</div><h3>Kamu keluar dari halaman ujian</h3><p>Tercatat <b>'+keluar+' kali</b> di server dan dapat dilihat guru sebagai bahan pertimbangan nilai.'+(D.maksKeluar?' Batas keluar '+D.maksKeluar+' kali.':'')+'</p><button class="btn" id="lj">Lanjut Mengerjakan</button>');G("lj").onclick=tutupOv}
+    var pen=Number(D.penalti)||0,f=function(x){return String(Math.round(x*100)/100).replace(".",",")},sisa=D.maksKeluar?D.maksKeluar-keluar:null;try{navigator.vibrate&&navigator.vibrate([200,80,200])}catch(x){}
+    ov('<div class="wr gt">!</div><h3>Kamu keluar dari halaman ujian</h3>'+(pen?'<div class="pot">−'+f(pen)+' poin</div><p>Nilaimu berkurang <b>'+f(pen)+' poin</b>. Total potongan sekarang <b>'+f(pen*keluar)+' poin</b> dari '+keluar+' kali keluar.</p>':'<p>Tercatat <b>'+keluar+' kali</b> di server dan dapat dilihat guru sebagai bahan pertimbangan nilai.</p>')+
+      (sisa!=null?'<div class="ksp">'+Array.apply(null,Array(D.maksKeluar)).map(function(_,j){return'<i class="'+(j<keluar?"hb":"")+'"></i>'}).join("")+'</div><div class="sisa">'+(sisa===1?'Kesempatan terakhir. Keluar sekali lagi membuat ujian dikumpulkan otomatis.':'Sisa '+sisa+' kali sebelum ujian dikumpulkan otomatis.')+'</div>':'')+
+      '<button class="btn" id="lj">Saya Mengerti, Lanjutkan</button>');G("lj").onclick=tutupOv}
   document.addEventListener("visibilitychange",function(){if(document.hidden)pergiYa();else kembali()});
   window.addEventListener("blur",function(){setTimeout(function(){var a=document.activeElement;if(a&&a.tagName==="IFRAME")return;if(!document.hasFocus())pergiYa()},150)});
   window.addEventListener("focus",function(){if(!document.hidden)kembali()});
@@ -234,7 +272,7 @@ input:focus,select:focus,textarea:focus{border-color:#16388A;box-shadow:0 0 0 3p
   function fmtDur(dt){if(!(dt>0))return"";var m=Math.floor(dt/60),s=Math.round(dt%60);return(m?m+" menit ":"")+(s||!m?s+" detik":"")}
   function tamat(r,alasan){selesai=true;jalan=false;tutupOv();try{localStorage.removeItem(LK)}catch(x){}
     G("uj").style.display="none";G("awal").style.display="";G("inf").innerHTML="";window.scrollTo(0,0);
-    var ada=r.benar!=null,nil=r.nilai!=null&&r.nilai!==""?Number(r.nilai):null,npg=ada?(r.benar+r.salah+r.kosong):0,pgPct=npg?r.benar/npg*100:null,acuan=nil!=null?nil:(ada&&r.adaUraian?pgPct:null);
+    var pen=Number(D&&D.penalti)||0,kel0=Number(r.keluar)||0,ada=r.benar!=null,nil=r.nilai!=null&&r.nilai!==""?Math.max(0,Math.round((Number(r.nilai)-pen*kel0)*100)/100):null,npg=ada?(r.benar+r.salah+r.kosong):0,pgPct=npg?r.benar/npg*100:null,acuan=nil!=null?nil:(ada&&r.adaUraian?pgPct:null);
     var t=acuan==null?"N":acuan>=90?"A":acuan>=75?"B":acuan>=60?"C":"D",o=TINGKAT[t],kel=Number(r.keluar)||0,
       dij=SO.length?SO.filter(terisi).length:null,dur=T0&&D?Math.min(D.durasi*60,(Date.now()-T0)/1000):0,
       wkt=new Date(),wk=wkt.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})+" · "+String(wkt.getHours()).padStart(2,"0")+"."+String(wkt.getMinutes()).padStart(2,"0");
@@ -242,7 +280,7 @@ input:focus,select:focus,textarea:focus{border-color:#16388A;box-shadow:0 0 0 3p
     var baris=[["Nama",e(P.nama)],["Kelas",e(P.kelas||"-")]];
     if(dij!=null)baris.push(["Soal dijawab",dij+" dari "+SO.length]);
     if(dur)baris.push(["Lama mengerjakan",fmtDur(dur)]);
-    baris.push(["Keluar halaman",'<span class="lc '+(kel?(D&&D.maksKeluar&&kel>=D.maksKeluar?"no":"wr"):"ok")+'">'+(kel?kel+" kali":"0 kali · fokus penuh")+'</span>']);
+    baris.push(["Keluar halaman",'<span class="lc '+(kel?(D&&D.maksKeluar&&kel>=D.maksKeluar?"no":"wr"):"ok")+'">'+(kel?kel+" kali"+(pen?" · −"+String(Math.round(pen*kel*100)/100).replace(".",",")+" poin":""):"0 kali · fokus penuh")+'</span>']);
     baris.push(["Dikumpulkan",wk]);
     isi.innerHTML=(alasan?'<div class="er" style="display:block;margin:0 0 12px">'+e(alasan)+'</div>':'')+
       '<div class="hc" id="hc" style="--c1:'+o.c1+';--c2:'+o.c2+'"><i class="bl" style="width:180px;height:180px;right:-60px;top:-50px"></i><i class="bl" style="width:120px;height:120px;left:-40px;top:200px"></i>'+kf+

@@ -182,6 +182,16 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
 .bk-lock.buka .bk-gm{animation:pop .5s cubic-bezier(.2,1.6,.4,1) both}
 @keyframes kd{50%{opacity:.5}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+/* pembahasan simulasi */
+.pbh-t{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}.pbh-t button{flex:1;min-width:70px;border:2px solid var(--line);background:#fff;border-radius:99px;padding:8px 6px;font-weight:800;font-size:12.5px;color:var(--mute);cursor:pointer}.pbh-t button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.pbh{border:2px solid var(--line);border-radius:18px;padding:14px;margin-top:12px;animation:muncul .35s both}.pbh.ok{border-color:#B7EBC6}.pbh.no{border-color:#FFC9C9}.pbh.ks{border-color:#FFE08A}.pbh.ur{border-color:#D0BFFF}
+.pbh .h{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800}.pbh .h .n{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;color:#fff;background:#7B8AA6;flex:none}.pbh.ok .n{background:#2B9348}.pbh.no .n{background:#E5383B}.pbh.ks .n{background:#E8A200}.pbh.ur .n{background:#7048E8}
+.pbh .q{font-size:15px;line-height:1.55;margin-top:10px;white-space:pre-wrap}.pbh img.qi{margin-top:8px}
+.pbh .o{display:flex;gap:10px;align-items:flex-start;margin-top:7px;padding:9px 11px;border-radius:12px;border:1.5px solid var(--line);font-size:14px;line-height:1.45}.pbh .o i{font-style:normal;font-weight:800;width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:#F1F3F8;flex:none;font-size:12.5px}
+.pbh .o.ok{border-color:#2B9348;background:#EAFBEF}.pbh .o.ok i{background:#2B9348;color:#fff}.pbh .o.no{border-color:#E5383B;background:#FFEFEF}.pbh .o.no i{background:#E5383B;color:#fff}.pbh .o em{margin-left:auto;font-style:normal;font-size:11.5px;font-weight:800;white-space:nowrap;padding-left:6px}.pbh .o.ok em{color:#1B6B34}.pbh .o.no em{color:#9B1C1F}
+.pbh .o img{display:block;max-width:100%;max-height:150px;border-radius:8px;margin-top:4px}
+.pbh .pb{margin-top:10px;background:#F3EFFF;color:#2E2390;border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.55}.pbh .pb b{display:block;font-size:12px;letter-spacing:.3px;text-transform:uppercase;margin-bottom:3px}
+.pbh .ua{margin-top:8px;background:#F7F9FD;border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.5;white-space:pre-wrap}
 </style>
 </head>
 <body>
@@ -260,18 +270,28 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
     var bg='<div class="it-bg">'+["📘","✏️","⭐","💡","📐","🔧","📗","✨","🧠","📒"].map(function(x,i){return'<i style="left:'+(i*10+3)+'%;animation-delay:'+(-i*1.3)+'s;animation-duration:'+(9+i%4*2)+'s;font-size:'+(18+i%3*8)+'px">'+x+'</i>'}).join("")+'</div>';
     function layar(h){el.innerHTML=bg+'<div class="it-c">'+h+'</div>'}
     function selesaiIntro(){bunyi("ok");el.classList.add("keluar");setTimeout(function(){el.remove();document.body.style.overflow="";selesai()},650)}
+    var LT=d.jenis==="latihan";
     function sambut(){var nm=ME?ME.nama.split(" ")[0]:"";
+      if(LT){layar('<div class="it-mas">'+MASKOT+'<div class="it-bub">Halo'+(nm?" "+e(nm):"")+'! 👋</div></div><div class="it-p">🏆 Latihan Soal'+(d.mapel?" · "+e(d.mapel):"")+'</div><h1 class="it-h" id="ith"></h1><p class="it-s" id="its">'+e(d.judul)+'</p>'+(d.guru?'<p class="it-g">bersama '+e(d.guru)+'</p>':'')+'<button class="btn it-b" id="it1">Mulai Persiapan ✨</button><button class="it-sk" id="itS">Lewati</button>');
+        setTimeout(function(){ketik(G("ith"),"Siap hadapi "+(d.ujian||"ujian")+"?",function(){var s=G("its");if(s)s.classList.add("on");var b=G("it1");if(b)b.classList.add("on")})},700);
+        G("it1").onclick=function(){bunyi("tik");petunjuk()};G("itS").onclick=selesaiIntro;return}
       layar('<div class="it-mas">'+MASKOT+'<div class="it-bub">Halo'+(nm?" "+e(nm):"")+'! 👋</div></div><div class="it-p">📘 Pertemuan '+e(d.pertemuan||1)+(d.mapel?" · "+e(d.mapel):"")+'</div><h1 class="it-h" id="ith"></h1><p class="it-s" id="its">'+e(d.judul)+'</p>'+(d.guru?'<p class="it-g">bersama '+e(d.guru)+'</p>':'')+'<button class="btn it-b" id="it1">Mulai Belajar ✨</button><button class="it-sk" id="itS">Lewati</button>');
       setTimeout(function(){ketik(G("ith"),nm?"Selamat datang kembali, "+nm+"!":"Selamat datang di kelas!",function(){var s=G("its");if(s)s.classList.add("on");var b=G("it1");if(b)b.classList.add("on")})},700);
       G("it1").onclick=function(){bunyi("tik");petunjuk()};G("itS").onclick=function(){identitas()}}
     function petunjuk(){var L=[["✍️","Tulis nama & kelasmu","Supaya hasil belajarmu tercatat di guru"]];
-      if(d.buku&&d.buku.length)L.push(["📕","Baca buku materi","Geser atau ketuk tepi halaman untuk membalik. Baca sampai "+d.buku.length+" halaman"]);
+      if(LT){var pk=d.paket.filter(function(p){return p.soal.length}),sim=pk.some(function(p){return p.durasi});L=[];
+        if(d.kisiBuku&&d.kisiBuku.length)L.push(["🧭","Baca kisi-kisi","Geser atau ketuk tepi halaman untuk membalik. Tekan + atau ketuk 2× untuk memperbesar"]);else if(d.kisi.length)L.push(["🧭","Pelajari kisi-kisi","Lihat indikator dan materi yang akan diujikan"]);
+        L.push(["📦","Pilih paket soal","Ada "+pk.length+" paket. Kerjakan satu per satu"]);
+        L.push(["✅","Mode Latihan","Pilih jawaban lalu tekan Periksa. Kunci dan pembahasan langsung tampil"]);
+        if(sim)L.push(["⏱️","Mode Simulasi","Waktu berjalan seperti ujian sungguhan. Kunci belum tampil sampai selesai"]);
+        L.push(["📖","Lihat pembahasan","Setelah selesai, pelajari jawaban benar dan alasannya lalu kirim nilaimu ke guru"])}
+      if(!LT){if(d.buku&&d.buku.length)L.push(["📕","Baca buku materi","Geser atau ketuk tepi halaman untuk membalik. Baca sampai "+d.buku.length+" halaman"]);
       if(d.bagian.length||d.media.length)L.push(["🎬","Pelajari materi & video","Gulir ke bawah, simak penjelasan, foto dan video"]);
       if(d.lkpd&&(d.lkpd.tugas.length||d.lkpd.buku.length||d.lkpd.file))L.push(["📝","Kerjakan LKPD","Baca lembar kerja lalu kerjakan sesuai petunjuk guru"]);
       if(d.soal.length)L.push(["🎯","Kerjakan soal asesmen","Ada "+d.soal.length+" soal. Tombolnya ada di bagian Kesimpulan"]);
-      L.push(["💬","Isi refleksi","Ceritakan seberapa suka dan seberapa paham kamu, lalu kirim ke guru"]);
-      layar('<div class="it-mas kecil">'+MASKOT+'<div class="it-bub">Ikuti langkah ini ya!</div></div><h2 class="it-h2">Begini cara belajarnya</h2><div class="it-l">'+L.map(function(x,i){return'<div class="it-i" style="--d:'+(i*.32+.2)+'s"><span class="it-n">'+(i+1)+'</span><span class="it-e">'+x[0]+'</span><div><b>'+e(x[1])+'</b><small>'+e(x[2])+'</small></div></div>'}).join("")+'<span class="it-garis" style="--d:'+(L.length*.32)+'s"></span></div><button class="btn it-b" id="it2" style="--d:'+(L.length*.32+.3)+'s">Saya Mengerti 👍</button>');
-      L.forEach(function(x,i){setTimeout(function(){bunyi("tik")},(i*.32+.2)*1000)});G("it2").onclick=identitas}
+      L.push(["💬","Isi refleksi","Ceritakan seberapa suka dan seberapa paham kamu, lalu kirim ke guru"]);}
+      layar('<div class="it-mas kecil">'+MASKOT+'<div class="it-bub">Ikuti langkah ini ya!</div></div><h2 class="it-h2">'+(LT?"Begini cara berlatihnya":"Begini cara belajarnya")+'</h2><div class="it-l">'+L.map(function(x,i){return'<div class="it-i" style="--d:'+(i*.32+.2)+'s"><span class="it-n">'+(i+1)+'</span><span class="it-e">'+x[0]+'</span><div><b>'+e(x[1])+'</b><small>'+e(x[2])+'</small></div></div>'}).join("")+'<span class="it-garis" style="--d:'+(L.length*.32)+'s"></span></div><button class="btn it-b" id="it2" style="--d:'+(L.length*.32+.3)+'s">Saya Mengerti 👍</button>');
+      L.forEach(function(x,i){setTimeout(function(){bunyi("tik")},(i*.32+.2)*1000)});G("it2").onclick=LT?selesaiIntro:identitas}
     function identitas(){
       if(ME){layar('<div class="it-mas kecil">'+MASKOT+'<div class="it-bub">Senang bertemu lagi!</div></div><div class="it-kd"><h2 class="it-h2" style="margin-top:0">Halo, '+e(ME.nama.split(" ")[0])+'! 👋</h2><p class="it-ks">'+e(ME.nama)+(ME.kelas?" · "+e(ME.kelas):"")+'</p><button class="btn it-b on" id="itM">Lanjut Belajar 🚀</button><button class="btn gh" id="itG">Bukan saya, ganti nama</button></div>');
         G("itM").onclick=selesaiIntro;G("itG").onclick=function(){ME=null;delete ST.me;simpanL(ST);identitas()};return}
@@ -421,8 +441,9 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
   function latihan(){var d=D,P=d.paket.filter(function(p){return p.soal.length}),tot=P.reduce(function(a,p){return a+p.soal.length},0),best=ST.best||{};
     var h='<div class="hero" style="background:linear-gradient(135deg,#E85D04,#C9184A 55%,#7B2CBF)"><span class="bl a" style="background:#FFD166"></span><span class="bl b"></span><span class="bl c" style="background:#80FFDB"></span>'+
       '<div class="in"><span class="pill">🏆 Latihan Soal &amp; Kisi-kisi</span><h1>'+e(d.judul)+'</h1><p>'+e([d.mapel,d.kelasNama,d.ujian?("Persiapan "+d.ujian):""].filter(Boolean).join(" · "))+'</p>'+
-      '<div class="chips"><span>📦 '+P.length+' paket</span><span>❓ '+tot+' soal</span>'+(d.kisi.length?'<span>🧭 '+d.kisi.length+' indikator</span>':'')+(d.guru?'<span>👩‍🏫 '+e(d.guru)+'</span>':'')+'</div></div></div><div class="w">';
+      '<div class="chips"><span>📦 '+P.length+' paket</span><span>❓ '+tot+' soal</span>'+(d.kisiBuku&&d.kisiBuku.length?'<span>🧭 Kisi-kisi '+d.kisiBuku.length+' hal</span>':d.kisi.length?'<span>🧭 '+d.kisi.length+' indikator</span>':'')+(d.guru?'<span>👩‍🏫 '+e(d.guru)+'</span>':'')+'</div></div></div><div class="w">';
     if(d.info)h+='<div class="sec"><div class="cd rv">'+'<div class="tx" style="margin-top:0">'+teks(d.info)+'</div></div></div>';
+    if(d.kisiBuku&&d.kisiBuku.length)h+=bukuHtml(d,{pre:"ks",hal:d.kisiBuku,sec:"kisiBk",ikon:"🧭",judul:"Kisi-kisi Ujian"});
     if(d.kisi.length)h+='<div class="sec" id="kisi"><div class="st"><i>🧭</i>Kisi-kisi Ujian</div><div class="cd rv"><div class="kk">'+d.kisi.map(function(k,i){return'<div class="kki"><span class="n">'+(i+1)+'</span><div><b>'+e(k.ind||k.kd||"-")+'</b>'+(k.materi?'<div class="m">Materi: '+e(k.materi)+'</div>':'')+(k.kd&&k.ind?'<div class="m">Kompetensi: '+e(k.kd)+'</div>':'')+'<div class="t">'+(k.level?'<span class="l">'+e(k.level)+'</span>':'')+(k.bentuk?'<span class="b">'+e(k.bentuk)+'</span>':'')+(k.no?'<span>No. '+e(k.no)+'</span>':'')+'</div></div></div>'}).join("")+'</div></div></div>';
     h+='<div class="sec" id="paket"><div class="st"><i>📦</i>Pilih Paket Latihan</div>'+(P.length?'<div class="pk">'+P.map(function(p,i){var w=WARNA[i%WARNA.length],b=best[p.id];return'<div class="pkc" style="background:linear-gradient(135deg,'+w[0]+','+w[1]+');animation-delay:'+(i*.08)+'s"><h3>'+e(p.nama||("Paket "+(i+1)))+'</h3><p>'+p.soal.length+' soal'+(p.durasi?" · "+p.durasi+" menit":"")+'</p><span class="bs">'+(b!=null?"Skor terbaik "+b:"Belum dicoba")+'</span>'+
       '<div class="row"><button class="btn" data-pl="'+i+'">Latihan</button>'+(p.durasi?'<button class="btn s" data-ps="'+i+'">⏱ Simulasi</button>':'')+'</div></div>'}).join("")+'</div>'+
@@ -430,6 +451,7 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
     G("app").innerHTML=h;document.title=d.judul+" · Latihan Soal";
     var io="IntersectionObserver"in window?new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add("on");io.unobserve(x.target)}})},{threshold:.1}):null;
     [].forEach.call(document.querySelectorAll(".rv"),function(el){io?io.observe(el):el.classList.add("on")});
+    if(d.kisiBuku&&d.kisiBuku.length)bukuJalan(d,{pre:"ks",hal:d.kisiBuku,ar:d.kisiAr,selesai:"✅ Kisi-kisi selesai dibaca · Pilih Paket",ke:"paket"});
     [].forEach.call(document.querySelectorAll("[data-pl]"),function(b){b.onclick=function(){jalan(P[+b.dataset.pl],false)}});
     [].forEach.call(document.querySelectorAll("[data-ps]"),function(b){b.onclick=function(){jalan(P[+b.dataset.ps],true)}})}
   function jalan(p,sim){var L=p.soal,i=0,jw={},cek={},akhir=sim?Date.now()+p.durasi*60000:0,tk=0,R=G("run"),selesai=false;
@@ -455,17 +477,28 @@ textarea{min-height:90px;resize:vertical;line-height:1.5;margin-top:10px}textare
       if(sk!=null){ST.best=ST.best||{};if(ST.best[p.id]==null||sk>ST.best[p.id])ST.best[p.id]=sk;simpanL(ST)}
       G("rin").innerHTML='<div class="cd skor" style="animation:muncul .4s both"><div class="ring">'+ring(sk==null?100:sk)+'</div><div class="star">'+"⭐".repeat(bt)+"☆".repeat(3-bt)+'</div><h3 style="margin-top:6px">'+(sk==null?"Latihan selesai!":sk>=90?"Luar biasa, siap ujian!":sk>=70?"Hebat, terus asah!":sk>=50?"Lumayan, ayo coba lagi!":"Jangan menyerah, pelajari pembahasannya!")+'</h3>'+
         (pg.length?'<div class="g3"><div><b>'+b+'</b>Benar</div><div><b>'+(pg.length-b-kos)+'</b>Salah</div><div><b>'+kos+'</b>Kosong</div></div>':'')+'<button class="btn gr" id="hk">📤 Kirim Nilai ke Guru</button></div>'+
-        '<div class="cd" style="margin-top:12px"><div class="st" style="margin:0">Pembahasan</div><div class="rv-l">'+L.map(function(x,j){var a=jw[x.id],ok=x.t==="pg"&&a===x.k;return'<div class="rv-i"><div class="h"><span>'+(j+1)+'.</span>'+(x.t==="pg"?'<span style="color:'+(ok?"#2B9348":"#E5383B")+'">'+(ok?"✓ Benar":a?"✗ Salah":"— Kosong")+'</span>':'<span style="color:#B76E00">Uraian</span>')+'</div><div class="q">'+e(x.q)+'</div>'+
-          (x.t==="pg"?'<div class="a">Jawabanmu: <b>'+(a?a+". "+e(x.o[A.indexOf(a)]||""):"-")+'</b><br>Kunci: <b style="color:#2B9348">'+x.k+". "+e(x.o[A.indexOf(x.k)]||"")+'</b>'+(x.pb?'<br><span style="color:var(--mute)">'+e(x.pb)+'</span>':'')+'</div>':'<div class="a">Jawabanmu: '+e(a||"-")+(x.kj?'<br><b>Contoh jawaban:</b> '+e(x.kj):'')+'</div>')+'</div>'}).join("")+'</div></div>';
+        '<div class="cd" style="margin-top:12px" id="pbW"><div class="st" style="margin:0">📖 Pembahasan Soal</div><div class="pbh-t" id="pbT"></div><div id="pbL"></div></div>';
+      pembahasan(L,jw);
       G("rnv").innerHTML='<button id="hu">🔁 Ulangi</button><button class="p" id="hb">Pilih Paket Lain</button>';animRing();if(sk!=null&&sk>=70)konfeti(70);G("rw").scrollTop=0;
       G("hu").onclick=function(){clearInterval(tk);jalan(p,sim)};G("hb").onclick=keluar;G("hk").onclick=function(){kirimHasil({bagian:p.nama+(sim?" (simulasi)":""),skor:sk,benar:b,jumlah:pg.length,detail:{jawab:jw}},G("hk"))}}
     soal()}
+  function pembahasan(L,jw){var st=function(x){var a=jw[x.id];return x.t!=="pg"?"ur":!a?"ks":a===x.k?"ok":"no"},hit={},f="semua";L.forEach(function(x){var k=st(x);hit[k]=(hit[k]||0)+1});
+    var T=[["semua","Semua",L.length],["no","Salah",hit.no||0],["ks","Kosong",hit.ks||0],["ok","Benar",hit.ok||0]];if(hit.ur)T.push(["ur","Uraian",hit.ur]);
+    function opsi(x,j){var t=String(x.o[j]==null?"":x.o[j]),g="";t=t.replace(/\n?\[\[gambar:(https:\/\/[^\]\s]+)\]\]/,function(m,u){g=u;return""});return{t:t,g:g}}
+    function gambar(){var T2=G("pbT"),Lb=G("pbL");if(!T2)return;T2.innerHTML=T.map(function(t){return'<button data-f="'+t[0]+'" class="'+(t[0]===f?"on":"")+'">'+t[1]+' · '+t[2]+'</button>'}).join("");
+      var D2=L.map(function(x,j){return[x,j]}).filter(function(z){return f==="semua"||st(z[0])===f});
+      Lb.innerHTML=D2.length?D2.map(function(z,n){var x=z[0],j=z[1],k=st(x),a=jw[x.id],lb={ok:"✓ Benar",no:"✗ Salah",ks:"— Tidak dijawab",ur:"✍️ Uraian"}[k];
+        return'<div class="pbh '+k+'" style="animation-delay:'+Math.min(n*.05,.5)+'s"><div class="h"><span class="n">'+(j+1)+'</span><span>'+lb+'</span>'+(x.t==="pg"?'<span style="margin-left:auto;color:var(--mute);font-weight:700">Kunci '+x.k+'</span>':'')+'</div><div class="q">'+e(x.q)+'</div>'+(x.img?'<img class="qi" src="'+e(img(x.img))+'" alt="">':'')+
+          (x.t==="pg"?x.o.map(function(_,i){var h=A.charAt(i),o=opsi(x,i),c=h===x.k?"ok":h===a?"no":"";return'<div class="o '+c+'"><i>'+h+'</i><div>'+e(o.t)+(o.g?'<img src="'+e(img(o.g))+'" alt="" loading="lazy">':'')+'</div>'+(h===x.k&&h===a?'<em>Jawabanmu ✓</em>':h===x.k?'<em>Jawaban benar</em>':h===a?'<em>Jawabanmu</em>':'')+'</div>'}).join(""):'<div class="ua"><b>Jawabanmu:</b> '+e(a||"-")+'</div>')+
+          (x.pb||x.kj?'<div class="pb"><b>💡 '+(x.t==="pg"?"Pembahasan":"Contoh jawaban")+'</b>'+e(x.t==="pg"?x.pb||"":x.kj||"")+(x.t==="pg"&&!x.pb?"":"")+'</div>':x.t==="pg"?'<div class="pb"><b>💡 Jawaban benar</b>'+x.k+'. '+e(opsi(x,A.indexOf(x.k)).t)+'</div>':'')+'</div>'}).join(""):'<div class="cd em" style="box-shadow:none">Tidak ada soal di kelompok ini 🎉</div>';
+      [].forEach.call(T2.querySelectorAll("[data-f]"),function(b){b.onclick=function(){f=b.dataset.f;gambar()}})}
+    gambar()}
 
   fetch(API+"?aksi=belajar&id="+encodeURIComponent(ID)).then(function(r){return r.text()}).then(function(t){var r;try{r=JSON.parse(t)}catch(x){throw"akses"}
     if(!r.ok){gagal(r.pesan==="Kunci salah"?"Server belum diperbarui. Guru perlu memasang versi baru Apps Script (kode: V6).":r.pesan||"Halaman tidak ditemukan.");return}
     D=r.data;D.kelas=D.kelas||[];
     if(D.warna&&/^#[0-9A-Fa-f]{6}$/.test(D.warna[0]||"")){document.documentElement.style.setProperty("--c1",D.warna[0]);document.documentElement.style.setProperty("--c2",D.warna[1]||D.warna[0])}
-    if(D.jenis==="latihan"){D.paket=D.paket||[];D.kisi=D.kisi||[];latihan()}else{D.tujuan=D.tujuan||[];D.bagian=D.bagian||[];D.media=D.media||[];D.soal=D.soal||[];D.lkpd=D.lkpd||{tugas:[]};D.lkpd.tugas=D.lkpd.tugas||[];D.lkpd.buku=D.lkpd.buku||[];D.buku=D.buku||[];if(D.sambut!==false&&!/[?&]tanpa=1/.test(location.search))intro(materi);else materi()}
+    if(D.jenis==="latihan"){D.paket=D.paket||[];D.kisi=D.kisi||[];D.kisiBuku=D.kisiBuku||[];if(D.sambut!==false&&!/[?&]tanpa=1/.test(location.search))intro(latihan);else latihan()}else{D.tujuan=D.tujuan||[];D.bagian=D.bagian||[];D.media=D.media||[];D.soal=D.soal||[];D.lkpd=D.lkpd||{tugas:[]};D.lkpd.tugas=D.lkpd.tugas||[];D.lkpd.buku=D.lkpd.buku||[];D.buku=D.buku||[];if(D.sambut!==false&&!/[?&]tanpa=1/.test(location.search))intro(materi);else materi()}
   }).catch(function(x){gagal(x==="akses"?"Server belum dibuka untuk umum (kode: A1).":"Tidak dapat terhubung ke server. Periksa koneksi internet lalu muat ulang halaman.")});
 })();
 </script>
